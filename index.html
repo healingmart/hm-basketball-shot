@@ -781,6 +781,79 @@
     -webkit-overflow-scrolling:touch;
   }
 
+
+
+  /* =========================================================
+     v40 CLEAN MENU SCROLL
+     - Standard screens: compact enough to fit
+     - Short screens: scroll remains available
+     - Scrollbar chrome is never shown
+     ========================================================= */
+
+  /* Keep scrolling functional without a visible browser scrollbar. */
+  #menu-overlay,
+  #menu-overlay.needs-scroll{
+    scrollbar-width:none!important;
+    -ms-overflow-style:none!important;
+    overscroll-behavior:contain;
+  }
+  #menu-overlay::-webkit-scrollbar{
+    width:0!important;
+    height:0!important;
+    display:none!important;
+  }
+
+  /* Slightly compact the home menu so normal desktop/mobile heights
+     do not trigger the overflow state in the first place. */
+  #menu-overlay .brand{margin-bottom:9px;}
+  #menu-overlay .menu-stats{margin-bottom:8px;}
+  #menu-overlay .menu-preferences{margin-bottom:7px;padding:8px;}
+  #menu-overlay .menu-preferences-head{margin-bottom:6px;}
+  #menu-overlay .menu-preferences #sound-btn,
+  #menu-overlay .menu-preferences #vibration-btn{height:38px;}
+  #menu-overlay .menu-grid{gap:6px;}
+  #menu-overlay .mode-btn{padding:12px 14px;}
+  #menu-overlay .mode-btn strong{font-size:16px;margin-bottom:3px;}
+  #menu-overlay .mode-btn span{font-size:11px;}
+  #menu-overlay .menu-manage{margin-top:7px;padding-top:7px;}
+  #menu-overlay .menu-manage-label{margin-bottom:5px;}
+  #menu-overlay .menu-reset-btn{min-height:42px;padding:7px 9px;}
+  #menu-overlay .menu-foot{margin-top:7px;}
+
+  @media(max-width:900px){
+    #menu-overlay .brand{margin-bottom:8px;}
+    #menu-overlay .ball-icon{width:44px;height:44px;min-width:44px;}
+    #menu-overlay .brand-copy h1{font-size:clamp(25px,6.7vw,29px);margin-bottom:3px;}
+    #menu-overlay .brand-badges{margin-top:4px;}
+    #menu-overlay .menu-stat{padding:7px 7px;}
+    #menu-overlay .menu-stat b{font-size:18px;}
+    #menu-overlay .menu-preferences{padding:7px;margin-bottom:6px;}
+    #menu-overlay .menu-preferences #sound-btn,
+    #menu-overlay .menu-preferences #vibration-btn{height:36px;}
+    #menu-overlay .menu-grid{gap:5px;}
+    #menu-overlay .mode-btn{padding:10px 12px;}
+    #menu-overlay .mode-btn strong{font-size:15px;}
+    #menu-overlay .mode-btn span{font-size:10px;}
+    #menu-overlay .menu-manage{margin-top:6px;padding-top:6px;}
+    #menu-overlay .menu-reset-btn{min-height:39px;}
+  }
+
+  @media(max-width:370px),
+         (max-width:900px) and (max-height:680px){
+    #menu-overlay .brand{margin-bottom:6px;}
+    #menu-overlay .brand-badges{display:none;}
+    #menu-overlay .menu-stats{margin-bottom:6px;}
+    #menu-overlay .menu-stat{padding:6px;}
+    #menu-overlay .menu-preferences-head{display:none;}
+    #menu-overlay .menu-preferences{padding:6px;margin-bottom:5px;}
+    #menu-overlay .menu-preferences #sound-btn,
+    #menu-overlay .menu-preferences #vibration-btn{height:32px;font-size:9px;}
+    #menu-overlay .mode-btn{padding:8px 10px;}
+    #menu-overlay .mode-btn strong{font-size:14px;}
+    #menu-overlay .mode-btn span{font-size:9px;}
+    #menu-overlay .menu-manage-label{display:none;}
+    #menu-overlay .menu-reset-btn{min-height:34px;padding:6px 8px;}
+  }
 </style>
 </head>
 <body>
