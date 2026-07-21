@@ -1,49 +1,17 @@
-HealingMart Basketball Rush v27 - Internal Check Report
+Basketball Shot v30 internal checks
 
-검사 대상
-- index.html
-- hm-basketball-shot.js
-- Blogger iframe 구조와 동일한 분리 문서 실행
+- Based on uploaded latest HTML.
+- Blogger mobile wrapper changed to position:fixed + inset:0 + max z-index.
+- Page header/content is covered on mobile; browser chrome remains until Fullscreen button is tapped.
+- Added in-game Fullscreen button using Fullscreen API (iframe has allowfullscreen).
+- Mobile layout uses viewport/safe-area, not fixed device width.
+- Portrait, narrow-phone, short-height and landscape breakpoints added.
+- status-text and aim-guide globally separated to remove overlap.
+- Overlay menus scroll inside viewport instead of clipping.
+- ResizeObserver fallback included.
 
-정적 검사
-- JavaScript node --check: PASS
-- index.html 게임 루트 #hm-basketball-game: PASS
-- #game-canvas 존재: PASS
-- 긴 inline 게임 script: 없음
-- 게임 core는 ./hm-basketball-shot.js?v=27 로컬 상대경로 호출
-- Three.js 0.149.0 1차 로드 + 게임 core 내부 3중 fallback 유지
-
-Chromium 실행 검사
-[직접 실행]
-- ready=1
-- boot=three-ready
-- THREE=149
-- core=27
-- 초기 상태: 모드를 선택해 시작하세요
-- 20단계 메뉴 열기: PASS
-- 자유투 진입: PASS
-- 드래그 입력 / power-wrap show: PASS
-- pageerror: 0
-
-[iframe 분리 실행]
-- ready=1
-- boot=three-ready
-- THREE=149
-- core=27
-- 자유투 진입: PASS
-- 드래그 입력: PASS
-- pageerror: 0
-
-[모바일 iframe 390x844]
-- 게임 루트 실제 크기 390x844
-- ready=1
-- boot=three-ready
-- 자유투 버튼 표시: PASS
-- 사운드 버튼 표시: PASS
-- 자유투 진입: PASS
-- pageerror: 0
-
-참고
-- 테스트 실행 환경은 외부 인터넷 요청이 제한되어 실제 CDN 네트워크 다운로드는 직접 검증할 수 없었습니다.
-- 테스트에서는 THREE r149 호환 API를 공급해 실제 게임 core 전체의 초기화/UI/입력 흐름을 실행했습니다.
-- 실제 index.html은 cdnjs r149를 우선 사용하고 실패하면 게임 core가 unpkg, jsDelivr 순서로 재시도합니다.
+Additional Blogger overlay hardening:
+- Mobile iframe wrapper is moved directly under document.body.
+- This escapes transformed/stacking-context post containers in Blogger themes.
+- z-index raised to 2147483647.
+- html/body scroll lock applied only on mobile.

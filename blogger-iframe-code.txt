@@ -1,11 +1,85 @@
-<!-- HealingMart Basketball Rush · Blogger iframe embed -->
-<div style="width:100%;max-width:1050px;margin:0 auto;overflow:hidden;border-radius:22px;background:#050709;">
+<style>
+/* HealingMart Basketball - mobile viewport overlay */
+.hm-basketball-iframe-wrap{
+  width:100%;
+  max-width:1050px;
+  margin:0 auto;
+  overflow:hidden;
+  border-radius:22px;
+  background:#050709;
+}
+.hm-basketball-iframe-wrap iframe{
+  display:block;
+  width:100%;
+  height:min(840px,calc(100dvh - 8px));
+  min-height:590px;
+  border:0;
+  background:#050709;
+}
+@media(max-width:900px){
+  html.hm-basketball-page-lock,
+  html.hm-basketball-page-lock body{
+    width:100%!important;
+    height:100%!important;
+    overflow:hidden!important;
+    overscroll-behavior:none!important;
+  }
+  .hm-basketball-iframe-wrap{
+    position:fixed!important;
+    inset:0!important;
+    z-index:2147483647!important;
+    width:100vw!important;
+    max-width:none!important;
+    height:100vh!important;
+    height:100dvh!important;
+    margin:0!important;
+    padding:0!important;
+    border:0!important;
+    border-radius:0!important;
+    background:#050709!important;
+  }
+  .hm-basketball-iframe-wrap iframe{
+    position:absolute!important;
+    inset:0!important;
+    width:100%!important;
+    height:100%!important;
+    min-height:0!important;
+    margin:0!important;
+    border:0!important;
+    border-radius:0!important;
+  }
+}
+</style>
+
+<div id="hmBasketballFullscreenWrap" class="hm-basketball-iframe-wrap">
   <iframe
     src="https://healingmart.github.io/hm-basketball-shot/"
-    title="Basketball Rush - HealingMart 3D Mini Game"
+    title="농구 슛 - Basketball Rush"
     loading="eager"
     allow="autoplay; fullscreen"
     allowfullscreen
-    style="display:block;width:100%;height:min(840px,calc(100dvh - 8px));min-height:590px;border:0;background:#050709;overflow:hidden;"
-  ></iframe>
+    scrolling="no">
+  </iframe>
 </div>
+
+<script>
+(function(){
+  var wrap=document.getElementById('hmBasketballFullscreenWrap');
+  if(!wrap){return;}
+  function mountBasketball(){
+    if(window.innerWidth<=900){
+      if(wrap.parentNode!==document.body){document.body.appendChild(wrap);}
+      document.documentElement.classList.add('hm-basketball-page-lock');
+    }else{
+      document.documentElement.classList.remove('hm-basketball-page-lock');
+    }
+  }
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded',mountBasketball,{once:true});
+  }else{
+    mountBasketball();
+  }
+  window.addEventListener('resize',mountBasketball,{passive:true});
+  window.addEventListener('orientationchange',function(){setTimeout(mountBasketball,120);},{passive:true});
+})();
+</script>
