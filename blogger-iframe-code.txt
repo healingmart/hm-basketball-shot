@@ -1,0 +1,11 @@
+<!-- HealingMart Basketball Rush · Blogger iframe embed -->
+<div style="width:100%;max-width:1050px;margin:0 auto;overflow:hidden;border-radius:22px;background:#050709;">
+  <iframe
+    src="https://healingmart.github.io/hm-basketball-shot/"
+    title="Basketball Rush - HealingMart 3D Mini Game"
+    loading="eager"
+    allow="autoplay; fullscreen"
+    allowfullscreen
+    style="display:block;width:100%;height:min(840px,calc(100dvh - 8px));min-height:590px;border:0;background:#050709;overflow:hidden;"
+  ></iframe>
+</div>
