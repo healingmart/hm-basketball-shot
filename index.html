@@ -459,6 +459,27 @@
     #hm-basketball-game{height:min(820px,calc(100dvh - 36px))}
   }
 
+  /* v41: mobile native share + SNS fallback sheet */
+  #hm-share-backdrop{
+    display:none;position:absolute;inset:0;z-index:38;
+    background:rgba(0,0,0,.56);backdrop-filter:blur(4px);
+  }
+  #hm-share-backdrop.show{display:block}
+  #hm-share-sheet{
+    display:none;position:absolute;left:12px;right:12px;bottom:max(12px,env(safe-area-inset-bottom,0px));z-index:39;
+    padding:14px;border:1px solid rgba(255,255,255,.12);border-radius:20px;
+    background:rgba(10,13,18,.97);box-shadow:0 18px 60px rgba(0,0,0,.45);
+    color:#fff;backdrop-filter:blur(18px);
+  }
+  #hm-share-sheet.show{display:block}
+  .hm-share-sheet-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
+  .hm-share-sheet-head strong{font-size:14px;letter-spacing:-.02em}
+  #hm-share-close{width:34px;height:34px;border:1px solid rgba(255,255,255,.12);border-radius:50%;background:rgba(255,255,255,.06);color:#fff;font-size:20px;line-height:1;cursor:pointer}
+  .hm-share-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px}
+  .hm-share-item{min-width:0;min-height:58px;padding:7px 4px;border:1px solid rgba(255,255,255,.10);border-radius:13px;background:rgba(255,255,255,.055);color:#fff;font:inherit;font-size:10.5px;font-weight:800;line-height:1.2;cursor:pointer}
+  .hm-share-item span{display:block;font-size:18px;margin-bottom:4px}
+  .hm-share-item:active{transform:scale(.97)}
+
   @media(max-width:900px){
     #hm-mobile-share{
       display:inline-flex;
@@ -893,6 +914,23 @@
       <path d="M8.2 10.8l7.5-4.5M8.2 13.2l7.5 4.5"></path>
     </svg>
   </button>
+  <div id="hm-share-backdrop" aria-hidden="true"></div>
+  <section id="hm-share-sheet" aria-label="공유 방법 선택" aria-hidden="true">
+    <div class="hm-share-sheet-head">
+      <strong>농구 슛 공유하기</strong>
+      <button id="hm-share-close" type="button" aria-label="공유창 닫기">×</button>
+    </div>
+    <div class="hm-share-grid">
+      <button class="hm-share-item" type="button" data-share="native"><span>↗</span>기기 공유</button>
+      <button class="hm-share-item" type="button" data-share="naver"><span>N</span>네이버</button>
+      <button class="hm-share-item" type="button" data-share="facebook"><span>f</span>페이스북</button>
+      <button class="hm-share-item" type="button" data-share="x"><span>𝕏</span>X</button>
+      <button class="hm-share-item" type="button" data-share="threads"><span>@</span>Threads</button>
+      <button class="hm-share-item" type="button" data-share="band"><span>B</span>밴드</button>
+      <button class="hm-share-item" type="button" data-share="telegram"><span>➤</span>텔레그램</button>
+      <button class="hm-share-item" type="button" data-share="copy"><span>⧉</span>링크 복사</button>
+    </div>
+  </section>
   <div id="utility-toast" role="status" aria-live="polite"></div>
   <div id="quick-controls" aria-label="게임 설정">
     <div id="game-title-static" aria-label="현재 게임 농구 슛"><span aria-hidden="true">🏀</span><span>농구 슛</span></div>
@@ -1080,6 +1118,9 @@ import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.185.1/build/three.m
   const vibrationBtn = document.getElementById('vibration-btn');
   const fullscreenBtn = document.getElementById('fullscreen-btn');
   const shareBtn = document.getElementById('hm-mobile-share');
+  const shareBackdrop = document.getElementById('hm-share-backdrop');
+  const shareSheet = document.getElementById('hm-share-sheet');
+  const shareCloseBtn = document.getElementById('hm-share-close');
   const resetStageBtn = document.getElementById('reset-stage-btn');
   const utilityToast = document.getElementById('utility-toast');
   const feverBanner = document.getElementById('fever-banner');
@@ -1255,6 +1296,8 @@ import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.185.1/build/three.m
 
 
   const BLOG_SHARE_URL = 'https://www.healing-mart.com/2026/07/Basketball-Rush.html';
+  const BLOG_SHARE_TITLE = '농구 슛 - Basketball Rush';
+  const BLOG_SHARE_TEXT = '20단계 BASKET RUSH에 도전해 보세요!';
   let utilityToastTimer = null;
 
   function showUtilityToast(message){
@@ -1265,22 +1308,52 @@ import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.185.1/build/three.m
     utilityToastTimer = setTimeout(() => utilityToast.classList.remove('show'), 1800);
   }
 
-  async function shareBasketball(){
-    soundUI();
-    const data = {
-      title: '농구 슛 - Basketball Rush',
-      text: '20단계 BASKET RUSH에 도전해 보세요!',
-      url: BLOG_SHARE_URL
-    };
+  function getShareData(){
+    return { title:BLOG_SHARE_TITLE, text:BLOG_SHARE_TEXT, url:BLOG_SHARE_URL };
+  }
+
+  function openShareSheet(){
+    if (!shareSheet || !shareBackdrop) return;
+    shareSheet.classList.add('show');
+    shareBackdrop.classList.add('show');
+    shareSheet.setAttribute('aria-hidden','false');
+    shareBackdrop.setAttribute('aria-hidden','false');
+  }
+
+  function closeShareSheet(){
+    if (!shareSheet || !shareBackdrop) return;
+    shareSheet.classList.remove('show');
+    shareBackdrop.classList.remove('show');
+    shareSheet.setAttribute('aria-hidden','true');
+    shareBackdrop.setAttribute('aria-hidden','true');
+  }
+
+  async function tryNativeShare(){
+    const data = getShareData();
+    if (typeof navigator.share !== 'function') return false;
+    if (typeof navigator.canShare === 'function' && !navigator.canShare(data)) return false;
     try {
-      if (navigator.share) {
-        await navigator.share(data);
+      await navigator.share(data);
+      return true;
+    } catch (error) {
+      if (error && error.name === 'AbortError') return true;
+      return false;
+    }
+  }
+
+  function openShareUrl(url){
+    const win = window.open(url, '_blank', 'noopener,noreferrer');
+    if (!win) showUtilityToast('팝업이 차단되었습니다. 브라우저 설정을 확인해 주세요.');
+  }
+
+  async function copyShareLink(){
+    try {
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(BLOG_SHARE_URL);
+        showUtilityToast('게임 링크를 복사했습니다.');
         return;
       }
-    } catch (error) {
-      if (error && error.name === 'AbortError') return;
-    }
-
+    } catch (_) {}
     try {
       const area = document.createElement('textarea');
       area.value = BLOG_SHARE_URL;
@@ -1295,6 +1368,44 @@ import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.185.1/build/three.m
     } catch (_) {
       showUtilityToast('공유 링크: ' + BLOG_SHARE_URL);
     }
+  }
+
+  async function shareBasketball(){
+    soundUI();
+    const shared = await tryNativeShare();
+    if (shared) return;
+    openShareSheet();
+  }
+
+  async function handleShareChoice(type){
+    const u = encodeURIComponent(BLOG_SHARE_URL);
+    const t = encodeURIComponent(BLOG_SHARE_TITLE);
+    const body = encodeURIComponent(BLOG_SHARE_TITLE + '\n' + BLOG_SHARE_URL);
+
+    if (type === 'native') {
+      const shared = await tryNativeShare();
+      if (!shared) showUtilityToast('기기 공유가 막혀 있습니다. Blogger iframe에 web-share 허용이 필요합니다.');
+      if (shared) closeShareSheet();
+      return;
+    }
+    if (type === 'naver') openShareUrl('https://share.naver.com/web/shareView?url=' + u + '&title=' + t);
+    else if (type === 'facebook') openShareUrl('https://www.facebook.com/sharer/sharer.php?u=' + u);
+    else if (type === 'x') openShareUrl('https://twitter.com/intent/tweet?url=' + u + '&text=' + t);
+    else if (type === 'threads') openShareUrl('https://www.threads.net/intent/post?text=' + body);
+    else if (type === 'band') openShareUrl('https://band.us/plugin/share?body=' + body);
+    else if (type === 'telegram') openShareUrl('https://t.me/share/url?url=' + u + '&text=' + t);
+    else if (type === 'copy') await copyShareLink();
+    closeShareSheet();
+  }
+
+  if (shareCloseBtn) shareCloseBtn.addEventListener('click', closeShareSheet);
+  if (shareBackdrop) shareBackdrop.addEventListener('click', closeShareSheet);
+  if (shareSheet) {
+    shareSheet.addEventListener('click', (event) => {
+      const btn = event.target.closest('[data-share]');
+      if (!btn) return;
+      handleShareChoice(btn.getAttribute('data-share'));
+    });
   }
 
   function resetStageProgress(){
