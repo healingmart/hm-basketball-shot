@@ -1272,22 +1272,21 @@ import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.185.1/build/three.m
     return { title:BLOG_SHARE_TITLE, text:BLOG_SHARE_TEXT, url:BLOG_SHARE_URL };
   }
 
-  async function shareBasketball(){
+  function shareBasketball(){
     /*
-     * Native Web Share only.
-     * Call navigator.share() directly from the user's tap so transient
-     * activation is preserved inside the cross-origin iframe.
+     * The game runs in a cross-origin GitHub Pages iframe.
+     * Ask the Blogger parent page to open its existing HealingMart share menu.
      */
-    if (typeof navigator.share !== 'function') {
-      showUtilityToast('이 브라우저에서는 기기 공유를 지원하지 않습니다.');
-      return;
+    if (window.parent && window.parent !== window) {
+      try {
+        window.parent.postMessage(
+          { type:'HM_BASKETBALL_SHARE_OPEN' },
+          'https://www.healing-mart.com'
+        );
+        return;
+      } catch (_) {}
     }
-    try {
-      await navigator.share(getShareData());
-    } catch (error) {
-      if (error && error.name === 'AbortError') return;
-      showUtilityToast('기기 공유를 열 수 없습니다. 브라우저 또는 iframe 권한을 확인해 주세요.');
-    }
+    showUtilityToast('힐링마트 블로그에서 열면 공유 메뉴를 사용할 수 있습니다.');
   }
 
   function resetStageProgress(){
