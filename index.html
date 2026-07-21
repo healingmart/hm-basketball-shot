@@ -130,185 +130,197 @@
 
 
   /* =========================================================
-     GitHub Pages iframe · mobile PWA-like viewport layer
-     - Keeps the uploaded game design/content intact
-     - On phones, the game uses the iframe viewport edge-to-edge
+     v30 MOBILE FULLSCREEN / RESPONSIVE LAYOUT FIX
+     - GitHub iframe document itself fills the visual viewport
+     - Safe-area aware
+     - No fixed mobile width assumptions
+     - Prevent HUD / aim-guide / status overlap
      ========================================================= */
-  html,body{width:100%;min-width:100%;min-height:100%;}
-  body{overflow-x:hidden;}
-
-  @media(max-width:640px){
-    html,body{
-      width:100%;height:100%;min-height:100%;margin:0;overflow:hidden;
-      overscroll-behavior:none;background:#050709;
-    }
-    body{height:100vh;height:100dvh;}
-    #hm-basketball-game{
-      width:100vw;max-width:none;
-      height:100vh;height:100dvh;
-      min-height:100vh;min-height:100dvh;
-      margin:0;border-radius:0;box-shadow:none;
-    }
-    .hud-top{padding-top:calc(58px + env(safe-area-inset-top));}
-    #quick-controls{
-      top:calc(8px + env(safe-area-inset-top));
-      left:calc(10px + env(safe-area-inset-left));
-      right:calc(10px + env(safe-area-inset-right));
-    }
-    .panel{padding-bottom:calc(74px + env(safe-area-inset-bottom));}
-    .stage-panel,.demo-panel{margin-bottom:calc(58px + env(safe-area-inset-bottom));}
-    #status-text{margin-bottom:calc(60px + env(safe-area-inset-bottom));}
-    #aim-guide{bottom:calc(74px + env(safe-area-inset-bottom));}
-    #back-btn{
-      left:calc(10px + env(safe-area-inset-left));
-      bottom:calc(10px + env(safe-area-inset-bottom));
-    }
-    #power-wrap{bottom:calc(23px + env(safe-area-inset-bottom));}
-    .ball-rack{bottom:calc(22px + env(safe-area-inset-bottom));}
-    #auto-demo-hud{bottom:calc(84px + env(safe-area-inset-bottom));}
+  html,body{
+    width:100%;height:100%;min-height:100dvh;margin:0;overflow:hidden;
+    overscroll-behavior:none;background:#050709;
   }
-
-  /* Short landscape phones: keep the full game inside the iframe viewport. */
-  @media(max-width:900px) and (orientation:landscape) and (max-height:560px){
-    html,body,#hm-basketball-game{
-      width:100%;height:100vh;height:100dvh;min-height:100vh;min-height:100dvh;
-      overflow:hidden;border-radius:0;
-    }
-    .overlay{
-      align-items:center;
-      padding:calc(8px + env(safe-area-inset-top)) calc(10px + env(safe-area-inset-right)) calc(8px + env(safe-area-inset-bottom)) calc(10px + env(safe-area-inset-left));
-    }
-    .panel,.stage-panel,.demo-panel{
-      max-height:100%;overflow:auto;overscroll-behavior:contain;
-      margin-bottom:0;
-    }
-    .brand{margin-bottom:10px;}
-    .brand-copy h1{font-size:25px;}
-    .menu-stats{margin-bottom:8px;}
-    .menu-grid{gap:6px;}
-    .mode-btn{padding:10px 12px;}
-    .mode-btn strong{font-size:14px;}
-    .mode-btn span{font-size:10px;}
+  #fullscreen-btn{
+    display:none;align-items:center;justify-content:center;height:50px;min-width:110px;
+    padding:0 13px;border:1px solid rgba(255,255,255,.09);border-radius:13px;
+    background:rgba(255,255,255,.04);color:#e7edf5;cursor:pointer;
+    font-size:12px;font-weight:1000;white-space:nowrap;
   }
+  #fullscreen-btn:active{transform:scale(.98)}
 
-  /* v29 responsive mobile iframe tuning */
-  html,body{width:100%;height:100%;min-height:100dvh;overflow:hidden}
-  body{overscroll-behavior:none}
-  @media (max-width:900px){
+  /* Globally separate the two bottom instructional layers. */
+  #status-text{
+    position:absolute;left:50%;bottom:118px;transform:translateX(-50%);
+    margin:0;max-width:calc(100% - 28px);text-align:center;white-space:normal;
+    line-height:1.3;z-index:10;
+  }
+  #aim-guide{bottom:62px;z-index:11}
+
+  @media(max-width:900px){
     #hm-basketball-game{
-      max-width:none;
-      width:100%;
-      height:100dvh;
-      min-height:100dvh;
-      margin:0;
-      border-radius:0;
-      box-shadow:none;
+      position:fixed;inset:0;width:100vw;max-width:none;
+      height:100vh;height:100dvh;min-height:0;margin:0;
+      border-radius:0;box-shadow:none;
     }
     .hud{
-      padding:calc(env(safe-area-inset-top,0px) + 8px) 10px calc(env(safe-area-inset-bottom,0px) + 8px);
+      padding:calc(env(safe-area-inset-top,0px) + 7px) 10px
+              calc(env(safe-area-inset-bottom,0px) + 8px);
       justify-content:flex-start;
     }
     .hud-top{
-      width:100%;
-      max-width:none;
-      gap:7px;
-      padding-top:52px;
+      width:100%;max-width:none;gap:6px;
+      padding-top:56px;
     }
-    .hud-group{gap:7px;flex:1;min-width:0}
-    .pill{min-width:0;min-height:58px;flex:1;padding:9px 8px;border-radius:14px;text-align:center}
-    .pill small{font-size:9px;margin-bottom:4px}
-    .pill strong{font-size:17px}
+    .hud-group{gap:6px;flex:1;min-width:0}
+    .pill{
+      flex:1;min-width:0;min-height:54px;padding:8px 6px;border-radius:13px;text-align:center;
+    }
+    .pill small{font-size:8px;letter-spacing:.55px;margin-bottom:4px}
+    .pill strong{font-size:clamp(14px,4vw,17px);line-height:1.02}
+
     #quick-controls{
-      left:10px;right:10px;top:calc(env(safe-area-inset-top,0px) + 8px);
-      justify-content:stretch;gap:7px;padding:5px;
+      left:10px;right:10px;top:calc(env(safe-area-inset-top,0px) + 7px);
+      display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:6px;padding:5px;
     }
-    #sound-btn,#vibration-btn{flex:1;min-width:0;height:42px;padding:0 8px;font-size:12px}
+    #sound-btn,#vibration-btn,#fullscreen-btn{
+      display:flex;min-width:0;width:100%;height:40px;padding:0 5px;
+      font-size:clamp(10px,2.9vw,12px);white-space:nowrap;
+    }
+
     #status-text{
-      position:absolute;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 126px);
-      transform:translateX(-50%);margin:0;max-width:calc(100% - 24px);
-      text-align:center;white-space:normal;line-height:1.3;font-size:12px;z-index:10;
+      left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 120px);
+      transform:translateX(-50%);margin:0;max-width:calc(100% - 26px);
+      padding:7px 11px;font-size:11px;line-height:1.25;z-index:12;
     }
     #aim-guide{
-      bottom:calc(env(safe-area-inset-bottom,0px) + 66px);
-      width:min(88%,380px);z-index:11;
+      bottom:calc(env(safe-area-inset-bottom,0px) + 62px);
+      width:min(84%,360px);z-index:11;
     }
-    #aim-guide .arrow{font-size:32px}
-    #aim-guide .guide-text{font-size:12px;line-height:1.2;padding:7px 11px}
-    #back-btn{left:10px;bottom:calc(env(safe-area-inset-bottom,0px) + 10px)}
-    #ball-rack{bottom:calc(env(safe-area-inset-bottom,0px) + 10px)}
-    #power-wrap{bottom:calc(env(safe-area-inset-bottom,0px) + 42px);width:min(72%,330px)}
-    #auto-demo-hud{width:calc(100% - 24px);bottom:calc(env(safe-area-inset-bottom,0px) + 82px);padding:8px 9px}
+    #aim-guide .arrow{font-size:30px}
+    #aim-guide .guide-text{margin-top:4px;padding:6px 10px;font-size:11px;line-height:1.2}
+    #power-wrap{
+      bottom:calc(env(safe-area-inset-bottom,0px) + 34px);width:min(70%,320px);
+    }
+    #ball-rack{bottom:calc(env(safe-area-inset-bottom,0px) + 9px)}
+    #back-btn{left:10px;bottom:calc(env(safe-area-inset-bottom,0px) + 9px)}
+    #auto-demo-hud{
+      width:calc(100% - 24px);bottom:calc(env(safe-area-inset-bottom,0px) + 82px);
+      padding:8px 9px;
+    }
+
+    /* All overlays scroll inside the viewport instead of clipping. */
     .overlay{
-      padding:calc(env(safe-area-inset-top,0px) + 14px) 14px calc(env(safe-area-inset-bottom,0px) + 14px);
-      align-items:flex-start;overflow-y:auto;-webkit-overflow-scrolling:touch;
-      background:rgba(3,5,7,.88);
+      inset:0;align-items:flex-start;justify-content:center;
+      overflow-y:auto;-webkit-overflow-scrolling:touch;
+      padding:calc(env(safe-area-inset-top,0px) + 10px) 12px
+              calc(env(safe-area-inset-bottom,0px) + 12px);
+      background:rgba(3,5,7,.91);
     }
-    .panel,.stage-panel,.demo-panel{width:100%;max-width:100%;margin:0}
-    .panel{padding-bottom:0}
-    .stage-panel,.demo-panel{max-height:none}
-    .brand{align-items:flex-start;margin-bottom:18px}
-    .brand-copy h1{font-size:clamp(27px,8vw,34px)}
-    .menu-stats{gap:7px}
-    .menu-stat b{font-size:18px}
-    .menu-grid{gap:8px}
-    .mode-btn{padding:14px 14px}
-    .mode-btn strong{font-size:16px}
-    .mode-btn span{font-size:11px}
-    .menu-foot{display:none}
-    .stage-header h2,.demo-head h2{font-size:21px}
-    .stage-grid{gap:5px}
-    .stage-card{min-height:58px}
-    .stage-card b{font-size:14px}
-    .stage-card span{font-size:9px}
-    .stage-actions,.actions{grid-template-columns:1fr;gap:8px}
-    .result-title{font-size:28px}
-  }
-  @media (max-width:480px){
-    .hud-top{gap:6px;padding-top:50px}
-    .hud-group{gap:6px}
-    .pill{min-height:54px;padding:8px 6px}
-    .pill strong{font-size:15px}
-    .pill small{font-size:8px;letter-spacing:.5px}
-    .brand{gap:12px}
-    .ball-icon{width:50px;height:50px;border-radius:15px}
-    .menu-stats{grid-template-columns:repeat(3,minmax(0,1fr))}
-    .menu-stat{padding:10px 9px}
-    .menu-stat b{font-size:16px}
-    .demo-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
-  }
-  @media (max-height:760px){
-    #status-text{bottom:calc(env(safe-area-inset-bottom,0px) + 116px)}
-    #aim-guide{bottom:calc(env(safe-area-inset-bottom,0px) + 58px)}
-  }
-  @media (orientation:landscape) and (max-height:540px){
-    #hm-basketball-game{height:100dvh;min-height:100dvh}
-    .hud{padding:calc(env(safe-area-inset-top,0px) + 6px) 8px calc(env(safe-area-inset-bottom,0px) + 6px)}
-    .hud-top{max-width:calc(100% - 216px);gap:6px;padding-top:2px}
-    .hud-group{gap:6px}
-    .pill{min-height:46px;padding:7px 7px}
-    .pill small{font-size:8px}
-    .pill strong{font-size:14px}
-    #quick-controls{top:calc(env(safe-area-inset-top,0px) + 6px);left:auto;right:8px;padding:4px;gap:6px}
-    #sound-btn,#vibration-btn{height:38px;min-width:92px;padding:0 10px;font-size:11px}
-    #status-text{bottom:calc(env(safe-area-inset-bottom,0px) + 88px);font-size:11px;max-width:62%}
-    #aim-guide{bottom:calc(env(safe-area-inset-bottom,0px) + 40px);width:min(44%,260px)}
-    #aim-guide .guide-text{display:none}
-    #power-wrap{bottom:calc(env(safe-area-inset-bottom,0px) + 24px);width:min(40%,250px)}
-    #ball-rack{bottom:calc(env(safe-area-inset-bottom,0px) + 6px)}
-    #back-btn{bottom:calc(env(safe-area-inset-bottom,0px) + 6px);height:34px;padding:0 12px;font-size:11px}
-    #auto-demo-hud{bottom:calc(env(safe-area-inset-bottom,0px) + 60px);width:min(58%,420px)}
-    .overlay{padding:calc(env(safe-area-inset-top,0px) + 10px) 10px calc(env(safe-area-inset-bottom,0px) + 10px)}
-    .panel,.stage-panel,.demo-panel{width:min(720px,100%)}
-    .brand-copy h1{font-size:24px}
-    .menu-stats{gap:6px;margin:0 0 12px}
-    .menu-stat{padding:9px 10px}
-    .menu-stat b{font-size:15px}
+    .panel,.stage-panel,.demo-panel{
+      width:100%;max-width:100%;margin:0;max-height:none;
+    }
+    .panel{padding:0}
+    .stage-panel,.demo-panel{padding:13px}
+
+    /* Main menu: fluid and compact enough for short phones. */
+    .brand{gap:11px;margin-bottom:12px;align-items:center}
+    .ball-icon{width:48px;height:48px;min-width:48px;border-radius:14px}
+    .brand-copy h1{font-size:clamp(26px,7vw,31px);margin-bottom:5px}
+    .sub{font-size:11px}
+    .brand-badges{gap:4px;margin-top:6px}
+    .brand-badge{font-size:8px;padding:4px 6px}
+    .menu-stats{gap:6px;margin:0 0 10px}
+    .menu-stat{padding:9px 8px;border-radius:12px}
+    .menu-stat small{font-size:9px}
+    .menu-stat b{font-size:16px;margin-top:2px}
     .menu-grid{gap:7px}
-    .mode-btn{padding:11px 12px}
-    .mode-btn strong{font-size:15px;margin-bottom:2px}
-    .mode-btn span{font-size:10px}
-    .stage-grid{grid-template-columns:repeat(5,1fr)}
-    .demo-grid{grid-template-columns:repeat(3,1fr)}
+    .mode-btn{padding:11px 12px;border-radius:13px}
+    .mode-btn strong{font-size:15px;margin-bottom:3px}
+    .mode-btn span{font-size:10px;line-height:1.35}
+    .mode-kicker,.demo-kicker,.auto-kicker{font-size:8px!important;margin-bottom:3px}
+    .menu-foot{display:none}
+
+    .stage-header h2,.demo-head h2{font-size:20px}
+    .stage-header p,.demo-head p{font-size:10px}
+    .stage-grid{gap:5px}
+    .stage-card{min-height:55px;padding:7px 3px}
+    .stage-card b{font-size:13px}
+    .stage-card span{font-size:8px}
+    .demo-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+    .demo-stage-card{min-height:80px;padding:8px}
+    .stage-actions,.actions{grid-template-columns:1fr;gap:7px}
+    .result-title{font-size:27px}
+  }
+
+  /* Very narrow phones */
+  @media(max-width:370px){
+    .hud-top{gap:4px;padding-top:54px}
+    .hud-group{gap:4px}
+    .pill{min-height:50px;padding:7px 4px}
+    .pill small{font-size:7px}
+    .pill strong{font-size:13px}
+    #quick-controls{left:7px;right:7px;gap:4px;padding:4px}
+    #sound-btn,#vibration-btn,#fullscreen-btn{font-size:9px;height:38px}
+    .brand-copy h1{font-size:25px}
+    .mode-btn{padding:10px 11px}
+  }
+
+  /* Short portrait screens */
+  @media(max-width:900px) and (max-height:720px) and (orientation:portrait){
+    .hud-top{padding-top:52px}
+    .pill{min-height:49px}
+    #status-text{bottom:calc(env(safe-area-inset-bottom,0px) + 108px)}
+    #aim-guide{bottom:calc(env(safe-area-inset-bottom,0px) + 54px)}
+    .brand{margin-bottom:8px}
+    .ball-icon{width:43px;height:43px;min-width:43px}
+    .brand-copy h1{font-size:24px}
+    .brand-badges{display:none}
+    .menu-stats{margin-bottom:7px}
+    .menu-stat{padding:7px}
+    .menu-grid{gap:5px}
+    .mode-btn{padding:9px 10px}
+    .mode-btn strong{font-size:14px}
+    .mode-btn span{font-size:9px}
+  }
+
+  /* Landscape phones */
+  @media(max-width:900px) and (orientation:landscape){
+    .hud{padding:calc(env(safe-area-inset-top,0px) + 5px) 8px calc(env(safe-area-inset-bottom,0px) + 5px)}
+    .hud-top{max-width:calc(100% - 285px);gap:5px;padding-top:0}
+    .hud-group{gap:5px}
+    .pill{min-height:44px;padding:6px 6px}
+    .pill small{font-size:7px}
+    .pill strong{font-size:13px}
+    #quick-controls{
+      left:auto;right:8px;top:calc(env(safe-area-inset-top,0px) + 5px);
+      width:270px;grid-template-columns:repeat(3,minmax(0,1fr));padding:4px;gap:4px;
+    }
+    #sound-btn,#vibration-btn,#fullscreen-btn{height:36px;font-size:9px}
+    #status-text{
+      bottom:calc(env(safe-area-inset-bottom,0px) + 78px);max-width:55%;font-size:10px;
+    }
+    #aim-guide{bottom:calc(env(safe-area-inset-bottom,0px) + 35px);width:min(40%,250px)}
+    #aim-guide .guide-text{display:none}
+    #power-wrap{bottom:calc(env(safe-area-inset-bottom,0px) + 22px);width:min(38%,250px)}
+    #ball-rack{bottom:calc(env(safe-area-inset-bottom,0px) + 5px)}
+    #back-btn{bottom:calc(env(safe-area-inset-bottom,0px) + 5px);height:32px;padding:0 11px;font-size:10px}
+    #auto-demo-hud{bottom:calc(env(safe-area-inset-bottom,0px) + 53px);width:min(60%,430px)}
+    .overlay{
+      padding:calc(env(safe-area-inset-top,0px) + 7px) 10px calc(env(safe-area-inset-bottom,0px) + 7px);
+    }
+    .panel,.stage-panel,.demo-panel{width:min(720px,100%)}
+    .brand{margin-bottom:8px}
+    .brand-copy h1{font-size:22px}
+    .brand-badges{display:none}
+    .menu-stats{margin-bottom:7px}
+    .menu-stat{padding:7px 8px}
+    .menu-stat b{font-size:14px}
+    .menu-grid{gap:5px}
+    .mode-btn{padding:8px 10px}
+    .mode-btn strong{font-size:13px}
+    .mode-btn span{font-size:9px}
+    .demo-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
   }
 
 </style>
@@ -345,6 +357,7 @@
   <div id="quick-controls" aria-label="게임 설정">
     <button id="sound-btn" type="button" aria-label="사운드 켜기 또는 끄기">🔊 사운드 ON</button>
     <button id="vibration-btn" type="button" aria-label="진동 켜기 또는 끄기">📳 진동 ON</button>
+    <button id="fullscreen-btn" type="button" aria-label="전체화면으로 보기">⛶ 전체화면</button>
   </div>
   <div id="fever-banner" class="fever-banner">FEVER TIME</div>
   <div id="tension-vignette"></div>
@@ -503,6 +516,7 @@ import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.185.1/build/three.m
   const autoDemoStopBtn = document.getElementById('auto-demo-stop');
   const soundBtn = document.getElementById('sound-btn');
   const vibrationBtn = document.getElementById('vibration-btn');
+  const fullscreenBtn = document.getElementById('fullscreen-btn');
   const feverBanner = document.getElementById('fever-banner');
   const goalFlash = document.getElementById('goal-flash');
   const missFlash = document.getElementById('miss-flash');
@@ -608,6 +622,38 @@ import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.185.1/build/three.m
   }
   syncQuickControls();
   if (window.HMAudio) { try { window.HMAudio.setEnabled(soundEnabled); } catch (_) {} }
+
+
+  function fullscreenElement(){
+    return document.fullscreenElement || document.webkitFullscreenElement || null;
+  }
+  function syncFullscreenButton(){
+    if (!fullscreenBtn) return;
+    const supported = !!(document.documentElement.requestFullscreen || document.documentElement.webkitRequestFullscreen);
+    fullscreenBtn.style.display = supported ? '' : 'none';
+    fullscreenBtn.textContent = fullscreenElement() ? '⛶ 화면복귀' : '⛶ 전체화면';
+  }
+  async function toggleFullscreen(){
+    const docEl = document.documentElement;
+    try {
+      if (!fullscreenElement()) {
+        if (docEl.requestFullscreen) {
+          try { await docEl.requestFullscreen({ navigationUI:'hide' }); }
+          catch (_) { await docEl.requestFullscreen(); }
+        } else if (docEl.webkitRequestFullscreen) {
+          docEl.webkitRequestFullscreen();
+        }
+      } else {
+        if (document.exitFullscreen) await document.exitFullscreen();
+        else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+      }
+    } catch (_) {}
+    setTimeout(syncFullscreenButton, 60);
+  }
+  if (fullscreenBtn) fullscreenBtn.addEventListener('click', toggleFullscreen);
+  document.addEventListener('fullscreenchange', syncFullscreenButton);
+  document.addEventListener('webkitfullscreenchange', syncFullscreenButton);
+  syncFullscreenButton();
 
   // ---------- Three.js scene ----------
   const scene = new THREE.Scene();
@@ -2246,7 +2292,12 @@ import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.185.1/build/three.m
     camera.aspect = w / h;
     camera.updateProjectionMatrix();
   }
-  new ResizeObserver(resize).observe(root);
+  if (window.ResizeObserver) {
+    try { new ResizeObserver(resize).observe(root); } catch (_) { window.addEventListener('resize', resize, {passive:true}); }
+  } else {
+    window.addEventListener('resize', resize, {passive:true});
+  }
+  window.addEventListener('orientationchange', () => setTimeout(resize, 120), {passive:true});
   resize();
 
   // ---------- UI events ----------
