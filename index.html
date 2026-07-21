@@ -190,6 +190,127 @@
     .mode-btn strong{font-size:14px;}
     .mode-btn span{font-size:10px;}
   }
+
+  /* v29 responsive mobile iframe tuning */
+  html,body{width:100%;height:100%;min-height:100dvh;overflow:hidden}
+  body{overscroll-behavior:none}
+  @media (max-width:900px){
+    #hm-basketball-game{
+      max-width:none;
+      width:100%;
+      height:100dvh;
+      min-height:100dvh;
+      margin:0;
+      border-radius:0;
+      box-shadow:none;
+    }
+    .hud{
+      padding:calc(env(safe-area-inset-top,0px) + 8px) 10px calc(env(safe-area-inset-bottom,0px) + 8px);
+      justify-content:flex-start;
+    }
+    .hud-top{
+      width:100%;
+      max-width:none;
+      gap:7px;
+      padding-top:52px;
+    }
+    .hud-group{gap:7px;flex:1;min-width:0}
+    .pill{min-width:0;min-height:58px;flex:1;padding:9px 8px;border-radius:14px;text-align:center}
+    .pill small{font-size:9px;margin-bottom:4px}
+    .pill strong{font-size:17px}
+    #quick-controls{
+      left:10px;right:10px;top:calc(env(safe-area-inset-top,0px) + 8px);
+      justify-content:stretch;gap:7px;padding:5px;
+    }
+    #sound-btn,#vibration-btn{flex:1;min-width:0;height:42px;padding:0 8px;font-size:12px}
+    #status-text{
+      position:absolute;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 126px);
+      transform:translateX(-50%);margin:0;max-width:calc(100% - 24px);
+      text-align:center;white-space:normal;line-height:1.3;font-size:12px;z-index:10;
+    }
+    #aim-guide{
+      bottom:calc(env(safe-area-inset-bottom,0px) + 66px);
+      width:min(88%,380px);z-index:11;
+    }
+    #aim-guide .arrow{font-size:32px}
+    #aim-guide .guide-text{font-size:12px;line-height:1.2;padding:7px 11px}
+    #back-btn{left:10px;bottom:calc(env(safe-area-inset-bottom,0px) + 10px)}
+    #ball-rack{bottom:calc(env(safe-area-inset-bottom,0px) + 10px)}
+    #power-wrap{bottom:calc(env(safe-area-inset-bottom,0px) + 42px);width:min(72%,330px)}
+    #auto-demo-hud{width:calc(100% - 24px);bottom:calc(env(safe-area-inset-bottom,0px) + 82px);padding:8px 9px}
+    .overlay{
+      padding:calc(env(safe-area-inset-top,0px) + 14px) 14px calc(env(safe-area-inset-bottom,0px) + 14px);
+      align-items:flex-start;overflow-y:auto;-webkit-overflow-scrolling:touch;
+      background:rgba(3,5,7,.88);
+    }
+    .panel,.stage-panel,.demo-panel{width:100%;max-width:100%;margin:0}
+    .panel{padding-bottom:0}
+    .stage-panel,.demo-panel{max-height:none}
+    .brand{align-items:flex-start;margin-bottom:18px}
+    .brand-copy h1{font-size:clamp(27px,8vw,34px)}
+    .menu-stats{gap:7px}
+    .menu-stat b{font-size:18px}
+    .menu-grid{gap:8px}
+    .mode-btn{padding:14px 14px}
+    .mode-btn strong{font-size:16px}
+    .mode-btn span{font-size:11px}
+    .menu-foot{display:none}
+    .stage-header h2,.demo-head h2{font-size:21px}
+    .stage-grid{gap:5px}
+    .stage-card{min-height:58px}
+    .stage-card b{font-size:14px}
+    .stage-card span{font-size:9px}
+    .stage-actions,.actions{grid-template-columns:1fr;gap:8px}
+    .result-title{font-size:28px}
+  }
+  @media (max-width:480px){
+    .hud-top{gap:6px;padding-top:50px}
+    .hud-group{gap:6px}
+    .pill{min-height:54px;padding:8px 6px}
+    .pill strong{font-size:15px}
+    .pill small{font-size:8px;letter-spacing:.5px}
+    .brand{gap:12px}
+    .ball-icon{width:50px;height:50px;border-radius:15px}
+    .menu-stats{grid-template-columns:repeat(3,minmax(0,1fr))}
+    .menu-stat{padding:10px 9px}
+    .menu-stat b{font-size:16px}
+    .demo-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+  }
+  @media (max-height:760px){
+    #status-text{bottom:calc(env(safe-area-inset-bottom,0px) + 116px)}
+    #aim-guide{bottom:calc(env(safe-area-inset-bottom,0px) + 58px)}
+  }
+  @media (orientation:landscape) and (max-height:540px){
+    #hm-basketball-game{height:100dvh;min-height:100dvh}
+    .hud{padding:calc(env(safe-area-inset-top,0px) + 6px) 8px calc(env(safe-area-inset-bottom,0px) + 6px)}
+    .hud-top{max-width:calc(100% - 216px);gap:6px;padding-top:2px}
+    .hud-group{gap:6px}
+    .pill{min-height:46px;padding:7px 7px}
+    .pill small{font-size:8px}
+    .pill strong{font-size:14px}
+    #quick-controls{top:calc(env(safe-area-inset-top,0px) + 6px);left:auto;right:8px;padding:4px;gap:6px}
+    #sound-btn,#vibration-btn{height:38px;min-width:92px;padding:0 10px;font-size:11px}
+    #status-text{bottom:calc(env(safe-area-inset-bottom,0px) + 88px);font-size:11px;max-width:62%}
+    #aim-guide{bottom:calc(env(safe-area-inset-bottom,0px) + 40px);width:min(44%,260px)}
+    #aim-guide .guide-text{display:none}
+    #power-wrap{bottom:calc(env(safe-area-inset-bottom,0px) + 24px);width:min(40%,250px)}
+    #ball-rack{bottom:calc(env(safe-area-inset-bottom,0px) + 6px)}
+    #back-btn{bottom:calc(env(safe-area-inset-bottom,0px) + 6px);height:34px;padding:0 12px;font-size:11px}
+    #auto-demo-hud{bottom:calc(env(safe-area-inset-bottom,0px) + 60px);width:min(58%,420px)}
+    .overlay{padding:calc(env(safe-area-inset-top,0px) + 10px) 10px calc(env(safe-area-inset-bottom,0px) + 10px)}
+    .panel,.stage-panel,.demo-panel{width:min(720px,100%)}
+    .brand-copy h1{font-size:24px}
+    .menu-stats{gap:6px;margin:0 0 12px}
+    .menu-stat{padding:9px 10px}
+    .menu-stat b{font-size:15px}
+    .menu-grid{gap:7px}
+    .mode-btn{padding:11px 12px}
+    .mode-btn strong{font-size:15px;margin-bottom:2px}
+    .mode-btn span{font-size:10px}
+    .stage-grid{grid-template-columns:repeat(5,1fr)}
+    .demo-grid{grid-template-columns:repeat(3,1fr)}
+  }
+
 </style>
 </head>
 <body>
